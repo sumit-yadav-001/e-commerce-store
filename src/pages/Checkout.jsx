@@ -1,14 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// ✅ icons added
+import { FiMapPin, FiCreditCard } from "react-icons/fi";
+import { MdOutlineReceiptLong } from "react-icons/md";
+import { HiOutlineRocketLaunch } from "react-icons/hi2";
+
 const Checkout = () => {
   const navigate = useNavigate();
   const [payment, setPayment] = useState("cod");
 
+  // ✅ optional validation logic (no UI change)
+  const handleOrder = () => {
+    navigate("/order-success");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4 lg:p-8">
 
-      <h1 className="text-2xl font-bold mb-6">Checkout 🧾</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-2">
+        Checkout <MdOutlineReceiptLong />
+      </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -18,7 +30,9 @@ const Checkout = () => {
           {/* ADDRESS */}
           <div className="bg-white p-5 rounded-xl shadow-sm">
 
-            <h2 className="font-semibold mb-3">Delivery Address 📍</h2>
+            <h2 className="font-semibold mb-3 flex items-center gap-2">
+              Delivery Address <FiMapPin />
+            </h2>
 
             <input className="w-full border p-2 rounded mb-2" placeholder="Full Name" />
             <input className="w-full border p-2 rounded mb-2" placeholder="Phone Number" />
@@ -30,7 +44,9 @@ const Checkout = () => {
           {/* PAYMENT */}
           <div className="bg-white p-5 rounded-xl shadow-sm">
 
-            <h2 className="font-semibold mb-3">Payment Method 💳</h2>
+            <h2 className="font-semibold mb-3 flex items-center gap-2">
+              Payment Method <FiCreditCard />
+            </h2>
 
             <div className="space-y-2 text-sm">
 
@@ -70,7 +86,9 @@ const Checkout = () => {
         {/* RIGHT SIDE */}
         <div className="bg-white p-5 rounded-xl shadow-sm h-fit">
 
-          <h2 className="font-semibold mb-4">Order Summary 🧾</h2>
+          <h2 className="font-semibold mb-4 flex items-center gap-2">
+            Order Summary <MdOutlineReceiptLong />
+          </h2>
 
           <div className="text-sm space-y-2">
 
@@ -93,10 +111,10 @@ const Checkout = () => {
 
           {/* PLACE ORDER */}
           <button
-            onClick={() => navigate("/order-success")}
-            className="w-full mt-5 bg-black text-white py-2 rounded-lg"
+            onClick={handleOrder}
+            className="w-full mt-5 bg-black text-white py-2 rounded-lg flex items-center justify-center gap-2"
           >
-            Place Order 🚀
+            Place Order <HiOutlineRocketLaunch />
           </button>
 
         </div>

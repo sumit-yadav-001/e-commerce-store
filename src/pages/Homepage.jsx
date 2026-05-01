@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ added
 import { getProducts } from "../services/api";
 import ProductCard from "../components/product/ProductCard";
 import Skeleton from "../components/ui/Skeleton";
@@ -27,6 +28,8 @@ const MicIcon = () => (
 /* ================= PAGE ================= */
 
 const HomePage = () => {
+  const navigate = useNavigate(); // ✅ added
+
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +72,7 @@ const HomePage = () => {
   return (
     <div className="w-full min-h-screen bg-[#FAFAFA]">
 
-      {/* CENTER WRAPPER (RESPONSIVE DESKTOP FIX) */}
+      {/* CENTER WRAPPER */}
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-24">
 
         {/* HEADER */}
@@ -100,7 +103,6 @@ const HomePage = () => {
             <MicIcon />
           </div>
 
-          {/* FILTER ICON (ONLY UI IMPROVED) */}
           <button className="w-12 h-12 bg-[#1A1A1A] text-white rounded-xl flex items-center justify-center shadow-md hover:scale-105 transition">
             <FiFilter size={18} />
           </button>
@@ -124,19 +126,12 @@ const HomePage = () => {
           ))}
         </div>
 
-        {/* PRODUCTS (RESPONSIVE GRID FIXED) */}
+        {/* PRODUCTS */}
         <h2 className="mt-6 mb-3 text-[16px] font-semibold text-[#1A1A1A]">
           Trending
         </h2>
 
-        <div className="
-          grid 
-          grid-cols-2 
-          sm:grid-cols-3 
-          lg:grid-cols-4 
-          xl:grid-cols-5 
-          gap-4
-        ">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {loading
             ? Array.from({ length: 10 }).map((_, i) => (
                 <Skeleton key={i} className="h-44 w-full rounded-xl" />
@@ -153,30 +148,30 @@ const HomePage = () => {
 
       </div>
 
-      {/* BOTTOM NAV (mobile only unchanged logic) */}
+      {/* ✅ BOTTOM NAV WITH LOGIC */}
       <div className="fixed bottom-0 left-0 w-full h-[70px] bg-white border-t border-[#E6E6E6] flex justify-around items-center sm:hidden z-50">
 
-        <button className="flex flex-col items-center text-xs text-[#1A1A1A]">
+        <button onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-[#1A1A1A]">
           <SlHome size={20} />
           Home
         </button>
 
-        <button className="flex flex-col items-center text-xs text-[#999999]">
+        <button onClick={() => navigate("/search")} className="flex flex-col items-center text-xs text-[#999999]">
           <FiSearch size={20} />
           Search
         </button>
 
-        <button className="flex flex-col items-center text-xs text-[#999999]">
+        <button onClick={() => navigate("/saved-items")} className="flex flex-col items-center text-xs text-[#999999]">
           <AiOutlineHeart size={20} />
           Saved
         </button>
 
-        <button className="flex flex-col items-center text-xs text-[#999999]">
+        <button onClick={() => navigate("/cart")} className="flex flex-col items-center text-xs text-[#999999]">
           <BsCart size={20} />
           Cart
         </button>
 
-        <button className="flex flex-col items-center text-xs text-[#999999]">
+        <button onClick={() => navigate("/account")} className="flex flex-col items-center text-xs text-[#999999]">
           <FiUser size={20} />
           Account
         </button>

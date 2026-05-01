@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ added
 import {
   FiHome,
   FiSearch,
@@ -26,12 +27,14 @@ const InputField = ({ label, children }) => {
 
 /* ================= BOTTOM NAV ================= */
 const BottomNav = () => {
+  const navigate = useNavigate(); // ✅ added
+
   const items = [
-    { icon: <FiHome />, label: "Home" },
-    { icon: <FiSearch />, label: "Search" },
-    { icon: <FiHeart />, label: "Saved" },
-    { icon: <FiShoppingCart />, label: "Cart" },
-    { icon: <FiUser />, label: "Account", active: true },
+    { icon: <FiHome />, label: "Home", path: "/home" },
+    { icon: <FiSearch />, label: "Search", path: "/search" },
+    { icon: <FiHeart />, label: "Saved", path: "/saved-items" },
+    { icon: <FiShoppingCart />, label: "Cart", path: "/cart" },
+    { icon: <FiUser />, label: "Account", path: "/account", active: true },
   ];
 
   return (
@@ -40,7 +43,8 @@ const BottomNav = () => {
         {items.map((item, i) => (
           <div
             key={i}
-            className={`flex flex-col items-center text-xs ${
+            onClick={() => navigate(item.path)} // ✅ navigation added
+            className={`flex flex-col items-center text-xs cursor-pointer ${
               item.active ? "text-black" : "text-gray-400"
             }`}
           >
@@ -55,6 +59,8 @@ const BottomNav = () => {
 
 /* ================= MAIN PAGE ================= */
 const MyDetails = () => {
+  const navigate = useNavigate(); // ✅ added
+
   const [form, setForm] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -67,25 +73,43 @@ const MyDetails = () => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  /* ✅ PRODUCTION LEVEL SUBMIT */
+  const handleSubmit = () => {
+    // basic validation
+    if (!form.name || !form.email) {
+      alert("Please fill required fields");
+      return;
+    }
+
+    // simulate API save
+    localStorage.setItem("userDetails", JSON.stringify(form));
+
+    alert("Details updated successfully");
+
+    // optional redirect
+    navigate("/account");
+  };
+
   return (
     <div className="min-h-screen bg-white flex justify-center">
 
-      {/* ================= CONTAINER ================= */}
       <div className="w-full max-w-md md:max-w-2xl px-4 pb-28 pt-6">
 
-        {/* ================= HEADER ================= */}
+        {/* HEADER */}
         <div className="flex items-center justify-between mb-6">
-          <FiArrowLeft className="text-2xl cursor-pointer" />
+          <FiArrowLeft
+            className="text-2xl cursor-pointer"
+            onClick={() => navigate(-1)} // ✅ back
+          />
           <h1 className="text-xl font-semibold">My Details</h1>
           <FiBell className="text-2xl cursor-pointer" />
         </div>
 
         <div className="border-b border-gray-200 mb-6" />
 
-        {/* ================= FORM ================= */}
+        {/* FORM */}
         <div className="flex flex-col gap-4">
 
-          {/* NAME */}
           <InputField label="Full Name">
             <input
               className="w-full outline-none text-sm"
@@ -94,7 +118,6 @@ const MyDetails = () => {
             />
           </InputField>
 
-          {/* EMAIL */}
           <InputField label="Email Address">
             <input
               className="w-full outline-none text-sm"
@@ -103,7 +126,6 @@ const MyDetails = () => {
             />
           </InputField>
 
-          {/* GENDER */}
           <InputField label="Gender">
             <select
               className="w-full outline-none text-sm bg-transparent"
@@ -117,7 +139,6 @@ const MyDetails = () => {
             <FiChevronDown />
           </InputField>
 
-          {/* DATE OF BIRTH (WITH ICON) */}
           <InputField label="Date of Birth">
             <div className="flex items-center gap-2 w-full">
               <FiCalendar className="text-gray-500" />
@@ -130,7 +151,6 @@ const MyDetails = () => {
             </div>
           </InputField>
 
-          {/* PHONE (WITH FLAG ICON) */}
           <InputField label="Phone Number">
             <div className="flex items-center gap-2 w-full">
               <FiFlag className="text-gray-500" />
@@ -143,14 +163,16 @@ const MyDetails = () => {
             </div>
           </InputField>
 
-          {/* SUBMIT */}
-          <button className="mt-6 bg-black text-white py-3 rounded-xl w-full text-sm font-medium active:scale-95 transition">
+          {/* ✅ SUBMIT FIXED */}
+          <button
+            onClick={handleSubmit}
+            className="mt-6 bg-black text-white py-3 rounded-xl w-full text-sm font-medium active:scale-95 transition"
+          >
             Submit
           </button>
         </div>
       </div>
 
-      {/* ================= BOTTOM NAV ================= */}
       <BottomNav />
     </div>
   );

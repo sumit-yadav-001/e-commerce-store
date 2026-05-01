@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ added
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { SlHome } from "react-icons/sl";
 import { FiSearch, FiUser } from "react-icons/fi";
@@ -7,6 +8,7 @@ import { BsCart } from "react-icons/bs";
 import { MdDeleteOutline } from "react-icons/md";
 
 export default function CartPage() {
+  const navigate = useNavigate(); // ✅ added
 
   const [cart, setCart] = useState([
     {
@@ -64,7 +66,8 @@ export default function CartPage() {
       {/* HEADER */}
       <div className="flex items-center justify-between px-4 pt-6 pb-4 border-b">
 
-        <HiArrowLeft size={22} />
+        {/* ✅ back navigation */}
+        <HiArrowLeft size={22} onClick={() => navigate(-1)} />
 
         <h1 className="text-xl font-semibold">My Cart</h1>
 
@@ -74,13 +77,8 @@ export default function CartPage() {
       {/* EMPTY STATE */}
       {cart.length === 0 && (
         <div className="flex flex-col items-center justify-center mt-32 px-6 text-center">
-
           <BsCart size={60} className="text-gray-300 mb-4" />
-
-          <h2 className="text-lg font-semibold">
-            Your Cart Is Empty!
-          </h2>
-
+          <h2 className="text-lg font-semibold">Your Cart Is Empty!</h2>
           <p className="text-sm text-gray-500 mt-2">
             When you add products, they’ll appear here.
           </p>
@@ -91,47 +89,28 @@ export default function CartPage() {
       {cart.length > 0 && (
         <>
           <div className="space-y-4 px-4 mt-4">
-
             {cart.map(item => (
-              <div
-                key={item.id}
-                className="flex gap-4 border rounded-xl p-4"
-              >
+              <div key={item.id} className="flex gap-4 border rounded-xl p-4">
 
-                {/* IMAGE */}
                 <div className="w-20 h-20 bg-gray-100 rounded-md" />
 
-                {/* DETAILS */}
                 <div className="flex-1 flex flex-col justify-between">
 
-                  {/* TOP */}
                   <div className="flex justify-between">
-
                     <div>
-                      <h4 className="text-sm font-semibold">
-                        {item.name}
-                      </h4>
-                      <p className="text-xs text-gray-500">
-                        {item.size}
-                      </p>
+                      <h4 className="text-sm font-semibold">{item.name}</h4>
+                      <p className="text-xs text-gray-500">{item.size}</p>
                     </div>
 
                     <button onClick={() => removeItem(item.id)}>
                       <MdDeleteOutline size={18} className="text-red-500" />
                     </button>
-
                   </div>
 
-                  {/* BOTTOM */}
                   <div className="flex justify-between items-center mt-2">
+                    <span className="text-sm font-semibold">${item.price}</span>
 
-                    <span className="text-sm font-semibold">
-                      ${item.price}
-                    </span>
-
-                    {/* QTY */}
                     <div className="flex items-center gap-2">
-
                       <button
                         onClick={() => decreaseQty(item.id)}
                         className="w-6 h-6 border rounded flex items-center justify-center"
@@ -139,9 +118,7 @@ export default function CartPage() {
                         -
                       </button>
 
-                      <span className="text-sm">
-                        {item.qty}
-                      </span>
+                      <span className="text-sm">{item.qty}</span>
 
                       <button
                         onClick={() => increaseQty(item.id)}
@@ -149,20 +126,16 @@ export default function CartPage() {
                       >
                         +
                       </button>
-
                     </div>
-
                   </div>
 
                 </div>
               </div>
             ))}
-
           </div>
 
           {/* SUMMARY */}
           <div className="px-4 mt-6 space-y-3">
-
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Sub-total</span>
               <span className="font-medium">${subtotal}</span>
@@ -179,47 +152,46 @@ export default function CartPage() {
               <span>Total</span>
               <span>${total}</span>
             </div>
-
           </div>
 
-          {/* CHECKOUT */}
+          {/* ✅ checkout navigation */}
           <div className="px-4">
-            <button className="w-full mt-6 bg-black text-white py-3 rounded-xl flex items-center justify-center gap-2">
-            Go To  Checkout
+            <button
+              onClick={() => navigate("/checkout")}
+              className="w-full mt-6 bg-black text-white py-3 rounded-xl flex items-center justify-center gap-2"
+            >
+              Go To Checkout
               <HiArrowRight size={18} />
             </button>
           </div>
         </>
       )}
 
-      {/* 🔥 BOTTOM NAV (EXACT SAME STYLE) */}
+      {/* 🔥 BOTTOM NAV (ONLY LOGIC ADDED) */}
       <div className="fixed bottom-0 left-0 w-full h-[65px] bg-white border-t flex justify-around items-center sm:hidden z-50">
 
-        <button className="flex flex-col items-center text-xs text-gray-500">
+        <button onClick={() => navigate("/home")} className="flex flex-col items-center text-xs text-gray-500">
           <SlHome size={20} />
           Home
         </button>
 
-        <button className="flex flex-col items-center text-xs text-gray-500">
+        <button onClick={() => navigate("/search")} className="flex flex-col items-center text-xs text-gray-500">
           <FiSearch size={20} />
           Search
         </button>
 
-        <button className="flex flex-col items-center text-xs text-gray-500">
+        <button onClick={() => navigate("/saved-items")} className="flex flex-col items-center text-xs text-gray-500">
           <AiOutlineHeart size={20} />
           Saved
         </button>
 
         {/* ACTIVE CART */}
         <div className="flex flex-col items-center text-xs text-black">
-          <div className="flex items-center gap-1">
-            <BsCart size={20} />
-      
-          </div>
+          <BsCart size={20} />
           Cart
         </div>
 
-        <button className="flex flex-col items-center text-xs text-gray-500">
+        <button onClick={() => navigate("/account")} className="flex flex-col items-center text-xs text-gray-500">
           <FiUser size={20} />
           Account
         </button>

@@ -1,22 +1,42 @@
 import { useNavigate } from "react-router-dom";
 import { FiXCircle, FiLogOut } from "react-icons/fi";
+import { useState } from "react";
 
 const Logout = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // 👉 yaha tum API / token clear logic laga sakte ho
-    localStorage.clear();
+  const [loading, setLoading] = useState(false);
 
-    setTimeout(() => {
-      navigate("/login");
-    }, 500);
+  const handleLogout = async () => {
+    if (loading) return;
+
+    setLoading(true);
+
+    try {
+      // ✅ 1. Clear auth data (production safe)
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("cart");
+      localStorage.removeItem("chat_messages");
+
+      // ✅ 2. Optional: API logout call (future ready)
+      // await fetch("/api/logout", { method: "POST" });
+
+      // ✅ 3. Small delay for UX smoothness
+      setTimeout(() => {
+        navigate("/login", { replace: true }); // ✅ prevent back navigation
+      }, 500);
+
+    } catch (err) {
+      console.error("Logout error:", err);
+      setLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
 
-      {/* Card (Figma Frame 24) */}
+      {/* Card */}
       <div
         className="
           relative
@@ -31,14 +51,14 @@ const Logout = () => {
         "
       >
 
-        {/* Warning Icon (Frame 26) */}
+        {/* Icon */}
         <div className="flex flex-col items-center gap-3">
 
           <div className="relative w-[78px] h-[78px] flex items-center justify-center">
             <FiXCircle className="text-red-500 w-[78px] h-[78px] opacity-90" />
           </div>
 
-          {/* Title + Subtitle */}
+          {/* Text */}
           <div className="flex flex-col items-center gap-2 text-center">
 
             <h1 className="text-[20px] font-semibold text-[#1A1A1A]">
@@ -52,12 +72,13 @@ const Logout = () => {
           </div>
         </div>
 
-        {/* Buttons Frame 73 */}
+        {/* Buttons */}
         <div className="flex flex-col w-full gap-3">
 
-          {/* Logout Button (Primary Red) */}
+          {/* Logout */}
           <button
             onClick={handleLogout}
+            disabled={loading}
             className="
               flex items-center justify-center gap-2
               w-full h-[54px]
@@ -67,13 +88,14 @@ const Logout = () => {
               font-medium text-[16px]
               hover:opacity-90
               transition
+              disabled:opacity-60
             "
           >
             <FiLogOut />
-            Logout
+            {loading ? "Logging out..." : "Logout"}
           </button>
 
-          {/* Cancel Button (Secondary) */}
+          {/* Cancel */}
           <button
             onClick={() => navigate(-1)}
             className="

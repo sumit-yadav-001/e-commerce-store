@@ -27,7 +27,9 @@ const Account = () => {
     { label: "Payment Methods", icon: FiCreditCard, path: "/payment" },
     { label: "Notifications", icon: FiBell, path: "/notifications" },
     { label: "FAQs", icon: FiHelpCircle, path: "/faqs" },
-    { label: "Help Center", icon: FiPhone, path: "/help" },
+
+    // ✅ FIX: Help Center navigation ensured
+    { label: "Help Center", icon: FiPhone, path: "/help-center" },
   ];
 
   const navItems = [
@@ -37,6 +39,12 @@ const Account = () => {
     { icon: FiShoppingCart, label: "Cart", path: "/cart" },
     { icon: FiUser, label: "Account", path: "/account" },
   ];
+
+  const handleNavigate = (path) => {
+    // ✅ production safe navigation
+    if (!path) return;
+    navigate(path);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex justify-center">
@@ -67,7 +75,7 @@ const Account = () => {
             return (
               <div
                 key={i}
-                onClick={() => navigate(item.path)}
+                onClick={() => handleNavigate(item.path)}
                 className="flex items-center justify-between px-4 py-5 cursor-pointer hover:bg-gray-50 active:bg-gray-100"
               >
                 <div className="flex items-center gap-3">
@@ -93,7 +101,7 @@ const Account = () => {
           <span className="text-[16px] font-medium">Logout</span>
         </div>
 
-        {/* BOTTOM NAV (mobile only) */}
+        {/* BOTTOM NAV */}
         <div className="fixed bottom-0 left-0 w-full flex justify-center md:hidden">
 
           <div className="w-full max-w-[390px] bg-white border-t border-gray-200 flex justify-between px-6 py-3">

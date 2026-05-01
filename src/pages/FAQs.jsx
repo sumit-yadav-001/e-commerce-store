@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ ADD
 import {
   FiSearch,
   FiBell,
@@ -16,6 +17,8 @@ import {
 } from "react-icons/ai";
 
 const FAQ = () => {
+  const navigate = useNavigate(); // ✅ ADD
+
   const [open, setOpen] = useState(null);
   const [search, setSearch] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
@@ -44,6 +47,7 @@ const FAQ = () => {
     },
   ];
 
+  /* ================= FILTER LOGIC ================= */
   const filtered = faqs.filter((item) => {
     const matchSearch = item.q
       .toLowerCase()
@@ -62,12 +66,26 @@ const FAQ = () => {
     return matchSearch && matchFilter;
   });
 
+  /* ================= NAVIGATION HANDLER ================= */
+  const handleNav = (tab) => {
+    setActiveTab(tab);
+
+    if (tab === "home") navigate("/home");
+    if (tab === "search") navigate("/search");
+    if (tab === "saved") navigate("/saved-items");
+    if (tab === "cart") navigate("/cart");
+    if (tab === "account") navigate("/account");
+  };
+
   return (
     <div className="min-h-screen bg-white px-4 md:px-10 py-6 pb-24">
 
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <FiArrowLeft className="text-xl cursor-pointer" />
+        <FiArrowLeft
+          onClick={() => navigate(-1)} // ✅ BACK LOGIC
+          className="text-xl cursor-pointer"
+        />
         <h1 className="text-xl md:text-2xl font-semibold">FAQs</h1>
         <FiBell className="text-xl" />
       </div>
@@ -110,11 +128,7 @@ const FAQ = () => {
               <h3 className="font-medium text-sm md:text-base">
                 {item.q}
               </h3>
-              {open === idx ? (
-                <FiChevronUp />
-              ) : (
-                <FiChevronDown />
-              )}
+              {open === idx ? <FiChevronUp /> : <FiChevronDown />}
             </div>
 
             {open === idx && (
@@ -130,16 +144,19 @@ const FAQ = () => {
         <p className="text-sm text-gray-500 mt-1 mb-4">
           Contact our support team anytime
         </p>
-        <button className="bg-black text-white px-5 py-2 rounded-lg text-sm">
+        <button
+          onClick={() => navigate("/customer-service")} // ✅ LOGIC
+          className="bg-black text-white px-5 py-2 rounded-lg text-sm"
+        >
           Contact Support
         </button>
       </div>
 
-      {/* ✅ BOTTOM NAVIGATION */}
+      {/* ✅ BOTTOM NAVIGATION (FIXED) */}
       <div className="fixed bottom-0 left-0 w-full border-t bg-white flex justify-around py-3 text-xs">
 
         <div
-          onClick={() => setActiveTab("home")}
+          onClick={() => handleNav("home")}
           className={`flex flex-col items-center ${
             activeTab === "home" ? "text-black" : "text-gray-400"
           }`}
@@ -149,7 +166,7 @@ const FAQ = () => {
         </div>
 
         <div
-          onClick={() => setActiveTab("search")}
+          onClick={() => handleNav("search")}
           className={`flex flex-col items-center ${
             activeTab === "search" ? "text-black" : "text-gray-400"
           }`}
@@ -159,7 +176,7 @@ const FAQ = () => {
         </div>
 
         <div
-          onClick={() => setActiveTab("saved")}
+          onClick={() => handleNav("saved")}
           className={`flex flex-col items-center ${
             activeTab === "saved" ? "text-black" : "text-gray-400"
           }`}
@@ -169,7 +186,7 @@ const FAQ = () => {
         </div>
 
         <div
-          onClick={() => setActiveTab("cart")}
+          onClick={() => handleNav("cart")}
           className={`flex flex-col items-center ${
             activeTab === "cart" ? "text-black" : "text-gray-400"
           }`}
@@ -179,7 +196,7 @@ const FAQ = () => {
         </div>
 
         <div
-          onClick={() => setActiveTab("account")}
+          onClick={() => handleNav("account")}
           className={`flex flex-col items-center ${
             activeTab === "account" ? "text-black" : "text-gray-400"
           }`}
