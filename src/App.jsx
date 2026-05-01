@@ -1,45 +1,45 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // Pages
-import Splash from "./pages/Splash";
-import Onboarding from "./pages/Onboarding";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import ForgotPassword from "./pages/ForgotPassword";
-import VerifyCode from "./pages/VerifyCode";
-import ResetPassword from "./pages/ResetPassword";
+import Splash from "./pages/Splash.jsx";
+import Onboarding from "./pages/Onboarding.jsx";
+import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import VerifyCode from "./pages/VerifyCode.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 
 // Core
-import HomePage from "./pages/HomePage";
-import ProductDetails from "./pages/ProductDetails";
-import Search from "./pages/Search";
-import Cart from "./pages/Cart";
-import Reviews from "./pages/Reviews";
+import HomePage from "./pages/HomePage.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
+import Search from "./pages/Search.jsx";
+import Cart from "./pages/Cart.jsx";
+import Reviews from "./pages/Reviews.jsx";
 
 // Checkout
-import CheckoutSummary from "./pages/CheckoutSummary";
-import PaymentMethod from "./pages/PaymentMethod";
-import AddCard from "./pages/AddCard";
-import Address from "./pages/Address";
-import OrderSuccess from "./pages/OrderSuccess";
+import CheckoutSummary from "./pages/CheckoutSummary.jsx";
+import PaymentMethod from "./pages/PaymentMethod.jsx";
+import AddCard from "./pages/AddCard.jsx";
+import Address from "./pages/Address.jsx";
+import OrderSuccess from "./pages/OrderSuccess.jsx";
 
 // Account
-import Account from "./pages/Account";
-import MyDetails from "./pages/MyDetails";
-import Orders from "./pages/Orders";
-import TrackOrder from "./pages/TrackOrder";
+import Account from "./pages/Account.jsx";
+import MyDetails from "./pages/MyDetails.jsx";
+import Orders from "./pages/Orders.jsx";
+import TrackOrder from "./pages/TrackOrder.jsx";
 
 // Support
-import Notifications from "./pages/Notifications";
-import FAQs from "./pages/FAQs";
-import HelpCenter from "./pages/HelpCenter";
-import CustomerService from "./pages/CustomerService";
+import Notifications from "./pages/Notifications.jsx";
+import FAQs from "./pages/FAQs.jsx";
+import HelpCenter from "./pages/HelpCenter.jsx";
+import CustomerService from "./pages/CustomerService.jsx";
 
 // Saved
-import SavedItems from "./pages/SavedItems";
+import SavedItems from "./pages/SavedItems.jsx";
 
-// Logout
-import Logout from "./pages/Logout";
+// 👉 ONLY ADDED
+import Logout from "./pages/Logout.jsx";
 
 /* ================= PROTECTED ROUTE ================= */
 const ProtectedRoute = ({ children }) => {
