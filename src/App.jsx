@@ -38,7 +38,7 @@ import CustomerService from "./pages/CustomerService";
 // Saved
 import SavedItems from "./pages/SavedItems";
 
-// 👉 ONLY ADDED
+// Logout
 import Logout from "./pages/Logout";
 
 /* ================= PROTECTED ROUTE ================= */
@@ -51,10 +51,8 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* ENTRY POINT */}
         <Route path="/" element={<Splash />} />
 
-        {/* AUTH FLOW */}
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
@@ -62,7 +60,6 @@ function App() {
         <Route path="/verify-code" element={<VerifyCode />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* CORE */}
         <Route path="/home" element={<HomePage />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/search" element={<Search />} />
@@ -70,29 +67,24 @@ function App() {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/saved-items" element={<SavedItems />} />
 
-        {/* CHECKOUT */}
         <Route path="/checkout" element={<ProtectedRoute><CheckoutSummary /></ProtectedRoute>} />
         <Route path="/address" element={<ProtectedRoute><Address /></ProtectedRoute>} />
         <Route path="/payment" element={<ProtectedRoute><PaymentMethod /></ProtectedRoute>} />
         <Route path="/add-card" element={<ProtectedRoute><AddCard /></ProtectedRoute>} />
         <Route path="/order-success" element={<ProtectedRoute><OrderSuccess /></ProtectedRoute>} />
 
-        {/* ACCOUNT */}
         <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
         <Route path="/my-details" element={<ProtectedRoute><MyDetails /></ProtectedRoute>} />
         <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
         <Route path="/track-order" element={<ProtectedRoute><TrackOrder /></ProtectedRoute>} />
 
-        {/* SUPPORT */}
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/help-center" element={<HelpCenter />} />
         <Route path="/customer-service" element={<CustomerService />} />
         <Route path="/notifications" element={<Notifications />} />
 
-        {/* 👉 ONLY ADDED ROUTE */}
         <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
 
-        {/* FALLBACK */}
         <Route path="*" element={<Navigate to="/" replace />} />
 
       </Routes>
