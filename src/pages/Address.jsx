@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaArrowLeft,
@@ -22,29 +22,89 @@ const Address = () => {
     city: "",
     state: "",
     zip: "",
-    country: ""
+    country: "",
+    isDefault: false
   });
 
-  const savedAddresses = [
-    { label: "Home", address: "925 S Chugach St #APT 10" },
-    { label: "Office", address: "2438 6th Ave, Ketchikan" },
-    { label: "Apartment", address: "2551 Vista Dr #B301" },
-    { label: "Parent’s House", address: "4821 Ridge Top Cir" }
-  ];
+  const [savedAddresses, setSavedAddresses] = useState([]);
 
+  /* ================= BACK LOGIC ================= */
+  const handleBack = () => {
+    if (step === "list") {
+      navigate(-1); // go previous page
+    } else {
+      setStep("list"); // go to list screen
+    }
+  };
+
+  /* ================= LOAD FROM LOCALSTORAGE ================= */
+  useEffect(() => {
+    const data = localStorage.getItem("addresses");
+    if (data) {
+      setSavedAddresses(JSON.parse(data));
+    } else {
+      const defaultData = [
+        { label: "Home", address: "925 S Chugach St #APT 10" },
+        { label: "Office", address: "2438 6th Ave, Ketchikan" }
+      ];
+      setSavedAddresses(defaultData);
+    }
+  }, []);
+
+  /* ================= SAVE TO LOCALSTORAGE ================= */
+  useEffect(() => {
+    localStorage.setItem("addresses", JSON.stringify(savedAddresses));
+  }, [savedAddresses]);
+
+  /* ================= FORM SUBMIT ================= */
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!form.name || !form.street || !form.city) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    const newAddress = {
+      label: form.name,
+      address: `${form.street}, ${form.city}, ${form.state}`,
+    };
+
+    let updated = [...savedAddresses, newAddress];
+
+    if (form.isDefault) {
+      setSelected(updated.length - 1);
+    }
+
+    setSavedAddresses(updated);
     setStep("success");
+
+    setForm({
+      name: "",
+      street: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: "",
+      isDefault: false
+    });
+  };
+
+  /* ================= CONTINUE ================= */
+  const handleContinue = () => {
+    const selectedAddress = savedAddresses[selected];
+    localStorage.setItem("selectedAddress", JSON.stringify(selectedAddress));
+    navigate("/payment");
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
 
-      {/* HEADER (no border) */}
+      {/* HEADER */}
       <div className="flex items-center justify-between px-4 py-4">
         <FaArrowLeft
           className="text-xl cursor-pointer"
-          onClick={() => setStep("list")}
+          onClick={handleBack}
         />
 
         <h1 className="text-xl font-semibold">
@@ -57,7 +117,7 @@ const Address = () => {
         <FaBell className="text-xl" />
       </div>
 
-      {/* ================== LIST ================== */}
+      {/* ================= LIST ================= */}
       {step === "list" && (
         <div className="p-4 space-y-4">
 
@@ -92,16 +152,15 @@ const Address = () => {
             + Add New Address
           </button>
 
-          <Button fullWidth size="lg" onClick={() => navigate("/payment")}>
+          <Button fullWidth size="lg" onClick={handleContinue}>
             Continue
           </Button>
         </div>
       )}
 
-      {/* ================== NEW ADDRESS ================== */}
+      {/* ================= NEW ADDRESS ================= */}
       {step === "new" && (
         <div className="flex-1 flex justify-center">
-
           <div className="w-full max-w-md px-4 py-6">
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -129,7 +188,14 @@ const Address = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <input type="checkbox" className="w-5 h-5 accent-black" />
+                <input
+                  type="checkbox"
+                  className="w-5 h-5 accent-black"
+                  checked={form.isDefault}
+                  onChange={(e) =>
+                    setForm({ ...form, isDefault: e.target.checked })
+                  }
+                />
                 <span className="text-gray-500 text-sm">
                   Make this default address
                 </span>
@@ -151,7 +217,7 @@ const Address = () => {
         </div>
       )}
 
-      {/* ================== MAP ================== */}
+      {/* ================= MAP ================= */}
       {step === "map" && (
         <div className="flex-1 relative">
 
@@ -167,7 +233,7 @@ const Address = () => {
         </div>
       )}
 
-      {/* ================== SUCCESS ================== */}
+      {/* ================= SUCCESS ================= */}
       {step === "success" && (
         <div className="flex-1 flex items-center justify-center px-4">
 
